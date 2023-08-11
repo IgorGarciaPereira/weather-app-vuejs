@@ -126,7 +126,7 @@ export default {
 }
 
 .form > label {
-  @apply flex gap-4 flex-1 justify-between;
+  @apply flex gap-4 flex-1 justify-between items-center;
 }
 
 .input-date {
