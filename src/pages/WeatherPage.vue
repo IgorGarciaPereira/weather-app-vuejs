@@ -35,6 +35,8 @@ export default {
           (geoObject) => this.coordinates = geoObject.coords,
           (geoError) => this.error.message = geoError.message
         )
+      } else {
+        this.error.message = "Browser don't supported"
       }
     },
     getWeather(){
@@ -70,7 +72,11 @@ export default {
 
 <template>
   <div class="page">
-    <div class="today-info">
+    <p v-if="error.message" class="error-message">
+      {{ error?.message }}
+    </p>
+
+    <div v-else class="today-info">
       <p class="location-area">
         {{ coordinates?.latitude }}, {{ coordinates?.longitude }}
       </p>
@@ -95,6 +101,10 @@ export default {
 .location-area{
   @apply bg-shadow px-4 py-2 rounded h-8;
   @apply min-w-full text-white flex place-items-center;
+}
+
+.error-message{
+  @apply bg-error px-4 py-2 rounded text-white font-semibold;
 }
 
 .temperature-now {
