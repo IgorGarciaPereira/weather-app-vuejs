@@ -1,3 +1,6 @@
+<script setup>
+import WeatherPage from "./pages/WeatherPage.vue"
+</script>
 <template>
-  <h1 class="text-3xl font-bold">Hello world!</h1>
+  <WeatherPage />
 </template>
