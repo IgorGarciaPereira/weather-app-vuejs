@@ -15,12 +15,23 @@ ChartJS.register(
 export default {
   name: 'TemperatureChart',
   components: { Line },
-  props: ["data", "labels"],
+  props: ["temperatures", "precipitations", "labels"],
   data() {
     return {
       chartData: {
         labels: this.$props.labels,
-        datasets: [ { data: this.$props.data } ]
+        datasets: [
+          {
+            label: 'Temperature',
+            backgroundColor: '#f87979',
+            data: this.$props.temperatures
+          },
+          {
+            label: 'Precipitations',
+            backgroundColor: '#8d99ae',
+            data: this.$props.precipitations
+          },
+        ]
       },
       chartOptions: {
         responsive: true
@@ -29,9 +40,12 @@ export default {
   },
 
   watch: {
-    data(newValue, _){
+    temperatures(newValue, _){
       this.chartData.datasets[0].data = newValue;
       this.$refs.chart.$forceUpdate()
+    },
+    precipitations(newValue, _){
+      this.chartData.datasets[1].data = newValue
     },
     labels(newValue, _){
       this.chartData.labels = newValue;

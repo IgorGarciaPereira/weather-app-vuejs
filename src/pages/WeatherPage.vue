@@ -16,7 +16,8 @@ export default {
         message: ""
       },
       chart: {
-        data: [],
+        temperatures: [],
+        precipitations: [],
         labels: [],
         loading: true
       }
@@ -59,10 +60,35 @@ export default {
         .then((data) => {
           this.weather.temperature = Number.parseInt(data.current_weather.temperature)
           this.chart.labels = data.daily.time
-          this.chart.data = data.daily.temperature_2m_mean
+          this.chart.temperatures = data.daily.temperature_2m_mean
           this.chart.loading = false;
         })
         .catch((err) => console.log(err))
+    },
+
+    getHistory(startDate = null, endDate = null){
+      const urlApi = "https://archive-api.open-meteo.com/v1/archive"
+      const params = {
+        latitude: this.coordinates.latitude,
+        longitude: this.coordinates.longitude,
+        start_date: startDate,
+        end_date: endDate,
+        daily: "temperature_2m_mean,precipitation_sum",
+        timezone: "GMT"
+      }
+      const queryParams = new URLSearchParams(params);
+      const url = `${urlApi}?${queryParams.toString()}`
+      this.chart.loading = true;
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+          this.chart.labels = data.daily.time;
+          this.chart.temperatures = data.daily.temperature_2m_mean;
+          this.chart.precipitations = data.daily.precipitation_sum;
+          this.chart.loading = false;
+        })
+        .catch((err) => console.log(err))
+
     },
     formatDateTime(){
       const now = new Date();
@@ -90,9 +116,15 @@ export default {
         {{ weather?.temperature }} <span class="text-4xl text-primary">{{ weather.temperature_unit }}</span>
       </p>
     </div>
-
+    <hr class="border border-b-[1px] border-0 my-4">
     <div class="mt-8">
-      <TemperatureHistory :data="chart.data" :labels="chart.labels" :loading="chart.loading" />
+      <TemperatureHistory
+        :temperatures="chart.temperatures"
+        :precipitations="chart.precipitations"
+        :labels="chart.labels"
+        :loading="chart.loading"
+        :handle-search="getHistory"
+      />
     </div>
   </div>
 </template>

@@ -4,7 +4,7 @@ import TemperatureChart from "./TemperatureChart.vue"
 
 export default {
   components: { ContentLoader, TemperatureChart },
-  props: ['data', 'labels', 'loading'],
+  props: ['temperatures', 'precipitations', 'labels', 'loading', 'handleSearch'],
   methods: {
     getDateString(date = null){
       let now = new Date();
@@ -18,6 +18,17 @@ export default {
       const today = new Date();
       today.setDate(today.getDate() - 7);
       return this.getDateString(today)
+    },
+
+    handleInternalSearch(event){
+      event.preventDefault();
+      const data = new FormData(event.target);
+      if (this.$props.handleSearch){
+        this.$props.handleSearch(
+          data.get('start_date'),
+          data.get('end_date')
+        )
+      }
     }
   }
 }
@@ -25,24 +36,35 @@ export default {
 
 <template>
   <section>
-    <h2 class="text-2xl font-semibold">
+    <h2 class="text-2xl font-semibold mb-4">
       History
     </h2>
 
-    <form class="form">
+    <form class="form" @submit="handleInternalSearch">
       <label>
         Start:
-        <input class="input-date" type="date" :defaultValue="calculate7DaysBefore()">
+        <input
+          id="start_date"
+          name="start_date"
+          class="input-date"
+          type="date"
+          :defaultValue="calculate7DaysBefore()"
+        >
       </label>
       <label>
         End:
         <input
+          id="end_date"
+          name="end_date"
           class="input-date"
           type="date"
           :max="getDateString()"
           :defaultValue="getDateString()"
         >
       </label>
+      <button type="submit" class="base-button">
+        Search
+      </button>
     </form>
 
     <content-loader
@@ -85,11 +107,20 @@ export default {
         height="6"
       />
     </content-loader>
-    <TemperatureChart v-else :data="data" :labels="labels" />
+    <TemperatureChart
+      v-else
+      :temperatures="temperatures"
+      :precipitations="precipitations"
+      :labels="labels"
+    />
   </section>
 </template>
 
 <style scoped>
+.base-button{
+  @apply bg-primary text-white rounded px-4 py-2 cursor-pointer;
+}
+
 .form {
   @apply flex flex-col md:flex-row gap-2;
 }
