@@ -131,7 +131,7 @@ export default {
 
 <style scoped>
 .page{
-  @apply rounded shadow-md p-8 border flex flex-col;
+  @apply rounded shadow-md p-8 border flex flex-col bg-white dark:bg-black;
 }
 
 .today-info {

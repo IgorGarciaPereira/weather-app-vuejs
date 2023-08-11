@@ -1,6 +1,10 @@
 <script setup>
+import Header from "./components/Header.vue"
 import WeatherPage from "./pages/WeatherPage.vue"
 </script>
 <template>
-  <WeatherPage />
+  <Header />
+  <div class="mt-20 md:mt-16">
+    <WeatherPage />
+  </div>
 </template>
