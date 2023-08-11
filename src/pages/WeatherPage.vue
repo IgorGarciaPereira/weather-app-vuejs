@@ -1,6 +1,8 @@
 <script>
+import TemperatureHistory from "../components/TemperatureHistory.vue"
 export default {
   name: "WeatherPage",
+  components: {TemperatureHistory},
   data(){
     return {
       timeToday: this.formatDateTime(),
@@ -15,7 +17,8 @@ export default {
       },
       chart: {
         data: [],
-        labels: []
+        labels: [],
+        loading: true
       }
     }
   },
@@ -84,8 +87,12 @@ export default {
       <p>{{ timeToday }} - {{ dateToday }}</p>
 
       <p class="temperature-now">
-        {{ weather?.temperature }} <span class="text-4xl">{{ weather.temperature_unit }}</span>
+        {{ weather?.temperature }} <span class="text-4xl text-primary">{{ weather.temperature_unit }}</span>
       </p>
+    </div>
+
+    <div class="mt-8">
+      <TemperatureHistory :data="chart.data" :labels="chart.labels" :loading="chart.loading" />
     </div>
   </div>
 </template>
