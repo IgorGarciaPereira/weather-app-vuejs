@@ -1,3 +1,10 @@
+<script setup>
+import Header from "./components/Header.vue"
+import WeatherPage from "./pages/WeatherPage.vue"
+</script>
 <template>
-  <h1 class="text-3xl font-bold">Hello world!</h1>
+  <Header />
+  <div class="mt-20 md:mt-16">
+    <WeatherPage />
+  </div>
 </template>
